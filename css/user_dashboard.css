@@ -1,0 +1,63 @@
+#main-heading
+{
+  background-color: #66ff99;
+  color: #3333cc;
+  padding: 2%;
+}
+
+#topnavbar
+{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #8c8c8c;
+}
+
+#logout-btn
+{
+
+  display: block;
+  color: white;
+  /* text-align: right; */
+  padding: 14px 16px;
+  text-decoration: none;
+  float: right;
+}
+
+#logout-btn:hover
+{
+  background-color: #111;
+}
+
+#sidenavbar
+{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  height: 600px;
+}
+
+.sidenavbar-items
+{
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.sidenavbar-items:hover
+{
+  padding: 10% 4%;
+  background-color: #555;
+  color: white;
+  text-align: center;
+}
+
+.sidenavbar-div, .display-div-content
+{
+  display:inline;
+  float: left;
+}
