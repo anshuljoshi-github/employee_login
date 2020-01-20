@@ -46,6 +46,11 @@
   margin-left: 25%;
 }
 
+.error
+{
+  color: #FF0000;
+}
+
 .sidenavbar-items
 {
   display: block;
