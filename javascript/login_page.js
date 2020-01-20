@@ -36,10 +36,10 @@ $(document).ready(
       else
       {
         alert("email: "+user_email+"\npassword: "+user_password);
-        $(location).attr('href',"user_dashboard.php");
         // redirect_to('user_dashboard.php');
       }
-    });
+    }
+  );
 
   $("#signup-btn").click(
     function()
@@ -133,5 +133,7 @@ $(document).ready(
         // window.location.href="user_dashboard.php";
         // $(location).attr('href',"user_dashboard.php");
       }
-    });
-});
+    }
+  );
+}
+);

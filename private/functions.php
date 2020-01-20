@@ -14,20 +14,14 @@
     {
       $data=mysqli_fetch_assoc($query_exec);
       $e_id=$data['e_id'];
-      $fname=$data['first_name'];
-      $lname=$data['last_name'];
-      $pnum=$data['phone_number'];
-      $dob=$data['dob'];
-      $gender=$data['gender'];
-      $address=$data['address'];
+      $_SESSION['fname']=$data['first_name'];
+      $_SESSION['lname']=$data['last_name'];
+      $_SESSION['pnum']=$data['phone_number'];
+      $_SESSION['dob']=$data['dob'];
+      $_SESSION['gender']=$data['gender'];
+      $_SESSION['address']=$data['address'];
       $_SESSION['e_id']=$e_id;
-      $_SESSION["email"]=$email;
-      $_SESSION['fname']=$fname;
-      $_SESSION['lname']=$lname;
-      $_SESSION['pnum']=$pnum;
-      $_SESSION['dob']=$dob;
-      $_SESSION['gender']=$gender;
-      $_SESSION['address']=$address;
+      $_SESSION["email"]=$data['email'];
       header("Location: user_dashboard.php");
     }
     else

@@ -1,22 +1,5 @@
-#main-heading
-{
-  background-color: #66ff99;
-  color: #3333cc;
-  padding: 2%;
-}
-
-#topnavbar
-{
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: #8c8c8c;
-}
-
 #logout-btn
 {
-
   display: block;
   color: white;
   /* text-align: right; */
@@ -30,6 +13,13 @@
   background-color: #111;
 }
 
+#main-heading
+{
+  background-color: #66ff99;
+  color: #3333cc;
+  padding: 2%;
+}
+
 #sidenavbar
 {
   list-style-type: none;
@@ -38,6 +28,22 @@
   width: 200px;
   background-color: #f1f1f1;
   height: 600px;
+}
+
+#topnavbar
+{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #8c8c8c;
+}
+
+.display-div-content
+{
+  margin: auto;
+  margin-top: 20px;
+  margin-left: 25%;
 }
 
 .sidenavbar-items
@@ -54,10 +60,22 @@
   background-color: #555;
   color: white;
   text-align: center;
+  cursor:pointer;
 }
 
 .sidenavbar-div, .display-div-content
 {
   display:inline;
   float: left;
+}
+
+input[type=text], input[type=date]
+{
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
