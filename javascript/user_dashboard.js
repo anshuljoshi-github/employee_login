@@ -30,5 +30,6 @@ $(document).ready(
         console.log("changepassword button clicked");
       }
     );
+    
   }
 );

@@ -11,6 +11,78 @@
     <script type="text/javascript" src="javascript/user_dashboard.js"></script>
   </head>
   <body>
+    <?php
+      if (isset($_POST["update-account-btn"]))
+      {
+        $e_id = $_SESSION["e_id"];
+        $_SESSION['fname'] = $_POST["fname"];
+        $_SESSION['lname'] = $_POST["lname"];
+        $_SESSION['pnum'] = $_POST["pnum"];
+        $_SESSION['email'] = $_POST["email"];
+        $_SESSION['dob'] = $_POST["dob"];
+        $_SESSION['gender'] = $_POST["gender"];
+        $_SESSION['address'] = $_POST["address"];
+        $update_profile_sql = "UPDATE employee_details SET first_name='" . $_SESSION['fname'] . "', last_name='". $_SESSION['lname'] ."', phone_number='". $_SESSION['pnum'] ."', email='". $_SESSION['email'] ."', dob='". $_SESSION['dob'] ."', gender='". $_SESSION['gender'] ."',address='". $_SESSION['address'] ."' WHERE e_id=$e_id";
+        $update_profile_exec = mysqli_query($conn, $update_profile_sql);
+        if ($update_profile_exec == TRUE)
+        {
+          $check_query = "SELECT * FROM employee_details WHERE email='".$_SESSION['email']."'";
+          $query_exec = mysqli_query($conn, $check_query);
+          if(mysqli_num_rows($query_exec))
+          {
+            $data=mysqli_fetch_assoc($query_exec);
+            $e_id=$data['e_id'];
+            $_SESSION['fname']=$data['first_name'];
+            $_SESSION['lname']=$data['last_name'];
+            $_SESSION['pnum']=$data['phone_number'];
+            $_SESSION['dob']=$data['dob'];
+            $_SESSION['gender']=$data['gender'];
+            $_SESSION['address']=$data['address'];
+            $_SESSION['e_id']=$e_id;
+            $_SESSION["email"]=$data['email'];
+            header("Location: user_dashboard.php");
+          }
+        }
+        else
+        {?>
+          <script type="text/javascript">
+            alert("email already exists");
+          </script>
+        <?php
+        }
+      }
+
+      if (isset($_POST["changepassword-btn"]))
+      {
+        $e_id = $_SESSION["e_id"];
+        $get_oldpass_sql = "SELECT hashed_password FROM employee_details WHERE e_id='$e_id'";
+        $get_oldpass_exec = mysqli_query($conn, $get_oldpass_sql);
+        $data=mysqli_fetch_assoc($get_oldpass_exec);
+        if (md5($_POST["oldpass"]) == $data['hashed_password'])
+        {
+          if ($_POST["newpass"] == $_POST["cnfmnewpass"])
+          {
+            $newhashedpass = md5($_POST["cnfmnewpass"]);
+            $update_password_sql = "UPDATE employee_details SET hashed_password='$newhashedpass' WHERE e_id=$e_id";
+            $update_password_exec = mysqli_query($conn, $update_password_sql);
+          }
+          else
+          {?>
+            <script type="text/javascript">
+              alert("passwords didn't match!!!");
+            </script>
+          <?php
+          }
+        }
+        else
+        {?>
+          <script>
+            alert("wrong old password inserted");
+          </script>
+        <?php
+        }
+      }
+    ?>
     <h2 id="main-heading">User Dashboard</h2>
     <div id="div1" class="topnavbar-div">
       <ul id="topnavbar">
@@ -88,79 +160,7 @@
     </div>
   </body>
 </html>
-<?php
-  if (isset($_POST["update-account-btn"]))
-  {
-    $e_id = $_SESSION["e_id"];
-    $_SESSION['fname'] = $_POST["fname"];
-    $_SESSION['lname'] = $_POST["lname"];
-    $_SESSION['pnum'] = $_POST["pnum"];
-    $_SESSION['email'] = $_POST["email"];
-    $_SESSION['dob'] = $_POST["dob"];
-    $_SESSION['gender'] = $_POST["gender"];
-    $_SESSION['address'] = $_POST["address"];
-    $update_profile_sql = "UPDATE employee_details SET first_name='" . $_SESSION['fname'] . "', last_name='". $_SESSION['lname'] ."', phone_number='". $_SESSION['pnum'] ."', email='". $_SESSION['email'] ."', dob='". $_SESSION['dob'] ."', gender='". $_SESSION['gender'] ."',address='". $_SESSION['address'] ."' WHERE e_id=$e_id";
-    $update_profile_exec = mysqli_query($conn, $update_profile_sql);
-    if ($update_profile_exec == TRUE)
-    {
-      $check_query = "SELECT * FROM employee_details WHERE email='".$_SESSION['email']."'";
-      $query_exec = mysqli_query($conn, $check_query);
-      if(mysqli_num_rows($query_exec))
-      {
-        $data=mysqli_fetch_assoc($query_exec);
-        $e_id=$data['e_id'];
-        $_SESSION['fname']=$data['first_name'];
-        $_SESSION['lname']=$data['last_name'];
-        $_SESSION['pnum']=$data['phone_number'];
-        $_SESSION['dob']=$data['dob'];
-        $_SESSION['gender']=$data['gender'];
-        $_SESSION['address']=$data['address'];
-        $_SESSION['e_id']=$e_id;
-        $_SESSION["email"]=$data['email'];
-        header("Location: user_dashboard.php");
-      }
-    }
-    else
-    {?>
-      <script type="text/javascript">
-        alert("email already exists");
-      </script>
-    <?php
-    }
-  }
-?>
-<?php
-  if (isset($_POST["changepassword-btn"]))
-  {
-    $e_id = $_SESSION["e_id"];
-    $get_oldpass_sql = "SELECT hashed_password FROM employee_details WHERE e_id='$e_id'";
-    $get_oldpass_exec = mysqli_query($conn, $get_oldpass_sql);
-    $data=mysqli_fetch_assoc($get_oldpass_exec);
-    if (md5($_POST["oldpass"]) == $data['hashed_password'])
-    {
-      if ($_POST["newpass"] == $_POST["cnfmnewpass"])
-      {
-        $newhashedpass = md5($_POST["cnfmnewpass"]);
-        $update_password_sql = "UPDATE employee_details SET hashed_password='$newhashedpass' WHERE e_id=$e_id";
-        $update_password_exec = mysqli_query($conn, $update_password_sql);
-      }
-      else
-      {?>
-        <script type="text/javascript">
-          alert("passwords didn't match!!!");
-        </script>
-      <?php
-      }
-    }
-    else
-    {?>
-      <script>
-        alert("wrong old password inserted");
-      </script>
-    <?php
-    }
-  }
-?>
+
 <?php
   include('private/db_connection_close.php');
 ?>
