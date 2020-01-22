@@ -126,5 +126,7 @@ if(mysqli_num_rows($query_exec))
 }
 if (isset($_POST["update-account-btn"]))
 
-        echo isset($fnameErr) . isset($lnameErr) . isset($pnumErr) . isset($emailErr) . isset($passwordErr) . isset($confirm_passwordErr) . isset($dobErr) . isset($genderErr) . isset($addressErr);die;
+echo isset($fnameErr) . isset($lnameErr) . isset($pnumErr) . isset($emailErr) . isset($passwordErr) . isset($confirm_passwordErr) . isset($dobErr) . isset($genderErr) . isset($addressErr);die;
 echo "if block";die;
+
+print_r($update_profile_sql."\n".$fnameErr."\n".$lnameErr."\n".$pnumErr."\n".$emailErr."\n".$dobErr."\n".$genderErr."\n".$addressErr);die;

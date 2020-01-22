@@ -13,13 +13,45 @@
   </head>
   <body>
     <?php
+      $login_emailErr = $login_passwordErr = "";
+      $login_email = $login_password ="";
+
       if (isset($_POST["login-btn1"]))
       {
-        validate_login($conn,test_input($_POST["login-email"]), test_input($_POST["login-password"]));
+        if (empty($_POST["login-email"]))
+        {
+          $login_emailErr = "Email is required";
+        }
+        else
+        {
+          $login_email = test_input($_POST["login-email"]);
+          if (!preg_match("/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/", $login_email))
+          {
+            $login_emailErr = "Invalid email address";
+          }
+        }
+
+        if (empty($_POST["login-password"]))
+        {
+          $login_passwordErr = "password is required";
+        }
+        else
+        {
+          $login_password = test_input($_POST["login-password"]);
+          if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/", $login_password))
+          {
+            $login_passwordErr = "password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character";
+          }
+        }
+
+        if (empty($login_emailErr) && empty($login_passwordErr))
+        {
+          validate_login($conn, $login_email, $login_password);
+        }
       }
 
       $fnameErr = $lnameErr = $pnumErr = $emailErr = $passwordErr = $confirm_passwordErr = $dobErr = $genderErr = $addressErr = "";
-      $fname = $lname = $pnum = $email = $password = $confirm_password = $dob = $gender = $address = "";
+      $fname = $lname = $pnum = $email = $password = $confirm_password = $hashed_password = $dob = $gender = $address = "";
 
       if(isset($_POST["signup"]))
       {
@@ -98,11 +130,6 @@
           {
             $confirm_passwordErr = "passwords didn't match";
           }
-          else
-          {
-            $hashed_password = md5($confirm_password);
-          }
-
         }
 
         if ($_POST["dob"] == "")
@@ -134,24 +161,12 @@
 
         if (empty($fnameErr) && empty($lnameErr) && empty($pnumErr) && empty($emailErr) && empty($passwordErr) && empty($confirm_passwordErr) && empty($dobErr) && empty($genderErr) && empty($addressErr))
         {
-          $insert_query = "INSERT INTO employee_details(first_name, last_name, phone_number, email, hashed_password, dob, gender, address) VALUES ('$fname','$lname','$pnum', '$email', '$hashed_password', '$dob', '$gender', '$address')";
-          $insert_result = mysqli_query($conn, $insert_query);
-          if ($insert_result == TRUE)
-          {
-            echo "New record created successfully";
-            validate_login($conn, $email, $confirm_password);
-          }
-          else
-          {?>
-            <script>
-              alert("<?php echo 'Error:\t' . $insert_query . '\n' . mysqli_error($conn); ?>");
-            </script>
-          <?php
-          }
+          $user_data = array('fname' => $fname, 'lname' => $lname, 'pnum' => $pnum, 'email' => $email, 'confirm_password' => $confirm_password, 'dob' => $dob, 'gender' => $gender, 'address' => $address);
+          insert_user_data($conn, $user_data);
         }
         else
         {
-          echo "not in insert block";
+          echo "some error exists";
         }
       }
     ?>
@@ -161,10 +176,10 @@
           <h2>login for employees</h2>
           <table>
             <tr>
-              <td><p>Email: </p></td><td><input type="text" id="user_email" name="login-email" value=""></td>
+              <td><p>Email: </p></td><td><input type="text" id="user_email" name="login-email" value="<?php echo $login_email; ?>"> <span class="error"> <?php echo $login_emailErr;?></span></td>
             </tr>
             <tr>
-              <td><p>Password: </p></td><td> <input type="password" id="user_password" name="login-password" value=""> </td>
+              <td><p>Password: </p></td><td> <input type="password" id="user_password" name="login-password" value="<?php echo $login_password; ?>"> <span class="error"> <?php echo $login_passwordErr;?></span></td>
             </tr>
             <tr>
               <td><button name="login-btn1" id="login-btn" type="submit" class="btn btn-primary">Log in</button></td><td>&nbsp &nbsp<button id="login-signup-btn" type="button" class="btn btn-outline-secondary">Signup</button></td>
