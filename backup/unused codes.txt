@@ -130,3 +130,19 @@ echo isset($fnameErr) . isset($lnameErr) . isset($pnumErr) . isset($emailErr) . 
 echo "if block";die;
 
 print_r($update_profile_sql."\n".$fnameErr."\n".$lnameErr."\n".$pnumErr."\n".$emailErr."\n".$dobErr."\n".$genderErr."\n".$addressErr);die;
+
+
+$res = mysqli_query($con,"SELECT COUNT(*) count FROM sign_up WHERE email_id = '$email_id'");
+$data = mysqli_fetch_assoc($res);
+if ($data['count'] > 0)
+{
+  ?>
+  <script>
+    alert("Email Already Exists");
+  </script>
+  <?php
+}
+else
+{
+
+}
