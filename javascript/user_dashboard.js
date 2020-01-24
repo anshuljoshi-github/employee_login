@@ -8,6 +8,7 @@ $(document).ready(
         $("#profile-div").hide();
         $("#changepassword-div").hide();
         $("#delete-account-div").hide();
+        $("#confirm-delete-div").hide();
         console.log("home button clicked");
       }
     );
@@ -18,6 +19,7 @@ $(document).ready(
         $("#profile-div").show();
         $("#changepassword-div").hide();
         $("#delete-account-div").hide();
+        $("#confirm-delete-div").hide();
         console.log("profile button clicked");
       }
     );
@@ -28,6 +30,7 @@ $(document).ready(
         $("#profile-div").hide();
         $("#changepassword-div").show();
         $("#delete-account-div").hide();
+        $("#confirm-delete-div").hide();
         console.log("changepassword button clicked");
       }
     );
@@ -38,7 +41,30 @@ $(document).ready(
         $("#profile-div").hide();
         $("#changepassword-div").hide();
         $("#delete-account-div").show();
+        $("#confirm-delete-div").hide();
         console.log("delete accoount button clicked");
+      }
+    );
+    $("#delete-btn").click(
+      function()
+      {
+        $("#home-div").hide();
+        $("#profile-div").hide();
+        $("#changepassword-div").hide();
+        $("#delete-account-div").hide();
+        $("#confirm-delete-div").show();
+        console.log("delete button clicked form delete account div");
+      }
+    );
+    $("#cancel-delete-btn").click(
+      function()
+      {
+        $("#home-div").hide();
+        $("#profile-div").hide();
+        $("#changepassword-div").hide();
+        $("#delete-account-div").show();
+        $("#confirm-delete-div").hide();
+        console.log("delete button clicked form delete account div");
       }
     );
     // $("#update-account-btn1").click(

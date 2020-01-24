@@ -12,7 +12,6 @@
   </head>
   <body>
     <?php
-
       if (!isset($_SESSION['e_id']))
       {
         header('Location: index.php');
@@ -20,14 +19,14 @@
       else
       {
         $fnameErr = $lnameErr = $pnumErr = $emailErr = $dobErr = $genderErr = $addressErr = "";
-        print_r($_SESSION);die;
-        $fname = $_SESSION['fname'];
-        $lname = $_SESSION['lname'];
-        $pnum = $_SESSION['pnum'];
-        $email = $_SESSION['email'];
-        $dob = $_SESSION['dob'];
-        $gender = $_SESSION['gender'];
-        $address = $_SESSION['address'];
+        $fname = get_fields_data($conn, "first_name");
+        $lname = get_fields_data($conn, "last_name");
+        $pnum = get_fields_data($conn, "phone_number");
+        $email = get_fields_data($conn, "email");
+        $dob = get_fields_data($conn, "dob");
+        $gender = get_fields_data($conn, "gender");
+        $address = get_fields_data($conn, "address");
+        // print_r($fname."\t".$lname."\t".$pnum."\t".$email."\t".$dob."\t".$gender."\t".$address);die;
 
         if (isset($_POST["update-account-btn"]))
         {
@@ -109,7 +108,6 @@
             $address = test_input($_POST["address"]);
           }
 
-
           if (empty($fnameErr) && empty($lnameErr) && empty($pnumErr) && empty($emailErr) && empty($dobErr) && empty($genderErr) && empty($addressErr))
           {
             $update_data = array('fname' => $fname, 'lname' => $lname, 'pnum' => $pnum, 'email' => $email, 'dob' => $dob, 'gender' => $gender, 'address' => $address);
@@ -159,6 +157,27 @@
             update_password($conn, $cnfmnewpassword);
           }
         }
+
+        $cnfm_delete_val = $cnfm_delete_val_Err = "";
+        if (isset($_POST["#confirm-delete-btn"]))
+        {
+          if (empty($_POST["cnfm_delete_input"]))
+          {
+            $cnfm_delete_val_Err = "Please type the given word";
+          }
+          else
+          {
+            $cnfm_delete_val = test_input($_POST["cnfm_delete_input"]);
+            if ($_POST["cnfm_delete_input"] != "DELETE")
+            {
+              $cnfm_delete_val_Err = "Wrong word typed";
+            }
+            else
+            {
+              deleteaccount($conn);
+            }
+          }
+        }
       }
     ?>
     <h2 id="main-heading">User Dashboard</h2>
@@ -178,7 +197,7 @@
     </div>
     <div id="home-div" class="display-div-content">
       <h2>
-        <?php echo "Welcome\t".$_SESSION['fname']."!"; ?></h2>
+        <?php echo "Welcome\t".get_fields_data($conn, "first_name")."!"; ?></h2>
     </div>
     <div id="profile-div" class="display-div-content">
       <h2>profile</h2>
@@ -240,12 +259,23 @@
     </div>
     <div id="delete-account-div" class="display-div-content">
       <h2><b>Do you want to delete your account ? </b></h2>
-      <table>
-        <tr>
-          <td><button class="btn btn-warning" type="button" name="button">Confirm</button> </td>
-          <td><button class="btn btn-secondary" type="button" name="button">Cancel</button> </td>
-        </tr>
-      </table>
+      <form class="" action="" method="post">
+        <td><button class="btn btn-warning" type="button" id="delete-btn">Delete account</button> </td>
+      </form>
+    </div>
+    <div id="confirm-delete-div" class="display-div-content">
+      <h2><b>Are you sure you want delete your account ? Type "DELETE" to confirm</b></h2>
+      <form id="cnfm_delete_form" class="" action="" method="post">
+        <table>
+          <tr>
+            <td colspan="2"><input type="text" name="cnfm_delete_input" value="<?php echo $cnfm_delete_val ?>"><span class="error"><?php echo $cnfm_delete_val_Err ?></span> </td>
+          </tr>
+          <tr>
+            <td><button class="btn btn-warning" type="button" id="confirm-delete-btn">Confirm Delete</button> </td>
+            <td><button class="btn btn-secondary" type="button" id="cancel-delete-btn">Cancel</button> </td>
+          </tr>
+        </table>
+      </form>
     </div>
   </body>
 </html>

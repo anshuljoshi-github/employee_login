@@ -12,7 +12,7 @@
     $stmt->bind_param("s", $user_data['email']);
     $stmt->execute();
     $res = $stmt->get_result();
-    $data = mysqli_fetch_assoc($res);
+    $data = $res->fetch_assoc();
     // echo $data['countentry']; die;
     if ($data['countentry'] > 0)
     {
@@ -36,11 +36,6 @@
     $stmt->close();
   }
 
-  function get_fields_data()
-  {
-
-  }
-
   function validate_login($conn,$email, $password1)
   {
     $password1 = md5($password1);
@@ -49,8 +44,8 @@
     $stmt->bind_param("ss", $email, $password1);
     $stmt->execute();
     $res = $stmt->get_result();
-    // print_r($res);die;
-    if(mysqli_num_rows($res))
+    // print_r($res->num_rows);die;
+    if($res->num_rows)
     {
       $data = $res->fetch_assoc();
       $_SESSION['e_id'] = $data['e_id'];
@@ -67,14 +62,25 @@
     $stmt->close();
   }
 
+  function get_fields_data($conn, $get_field)
+  {
+    $get_data_query = "SELECT ".$get_field." FROM employee_details WHERE e_id=?";
+    $stmt = $conn->prepare($get_data_query);
+    $stmt->bind_param('i', $_SESSION['e_id']);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $data = $res->fetch_assoc();
+    return $data[$get_field];
+  }
+
   function update_user_profile($conn, $update_data)
   {
-    $check_email_query = "SELECT COUNT(*) countentry FROM employee_details WHERE email = '";
-    $check_email_query .= $update_data['email'];
-    $check_email_query .= "' AND e_id != '".$_SESSION['e_id']."'";
-    // echo $check_email_query; die;
-    $res = mysqli_query($conn, $check_email_query);
-    $data = mysqli_fetch_assoc($res);
+    $check_email_query = "SELECT COUNT(*) countentry FROM employee_details WHERE email = ? AND e_id != ?";
+    $stmt = $conn->prepare($check_email_query);
+    $stmt->bind_param('ss', $update_data['email'], $_SESSION['e_id']);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $data = $res->fetch_assoc();
     // echo $data['countentry']; die;
     if ($data['countentry'] > 0)
     {
@@ -86,41 +92,23 @@
     }
     else
     {
-      $update_profile_sql = "UPDATE employee_details SET first_name='";
-      $update_profile_sql .= $update_data['fname'];
-      $update_profile_sql .= "', last_name='";
-      $update_profile_sql .= $update_data['lname'];
-      $update_profile_sql .= "', phone_number='";
-      $update_profile_sql .= $update_data['pnum'];
-      $update_profile_sql .= "', email='";
-      $update_profile_sql .= $update_data['email'];
-      $update_profile_sql .= "', dob='";
-      $update_profile_sql .= $update_data['dob'];
-      $update_profile_sql .= "', gender='";
-      $update_profile_sql .= $update_data['gender'];
-      $update_profile_sql .= "',address='";
-      $update_profile_sql .= $update_data['address'];
-      $update_profile_sql .="' WHERE e_id=";
-      $update_profile_sql .=  $_SESSION['e_id'];
-      // echo $update_profile_sql;die
-      $update_profile_exec = mysqli_query($conn, $update_profile_sql);
-      $check_query = "SELECT * FROM employee_details WHERE email='".$_SESSION['email']."'";
-      $query_exec = mysqli_query($conn, $check_query);
-      if(mysqli_num_rows($query_exec))
-      {
-        $data=mysqli_fetch_assoc($query_exec);
-        $_SESSION['e_id']=$data['e_id'];
-        header("Location: user_dashboard.php");
-      }
+      $update_profile_sql = "UPDATE employee_details SET first_name = ?, last_name = ?, phone_number = ?, email = ?, dob = ?, gender = ?, address= ? WHERE e_id=?";
+      $stmt1 = $conn->prepare($update_profile_sql);
+      $stmt1->bind_param('sssssssi', $update_data['fname'], $update_data['lname'], $update_data['pnum'], $update_data['email'], $update_data['dob'], $update_data['gender'], $update_data['address'], $_SESSION['e_id']);
+      $stmt1->execute();
+      $stmt1->close();
     }
+    $stmt->close();
   }
 
   function old_password_check($conn, $oldpass)
   {
-    $e_id = $_SESSION["e_id"];
-    $get_oldpass_sql = "SELECT hashed_password FROM employee_details WHERE e_id='$e_id'";
-    $get_oldpass_exec = mysqli_query($conn, $get_oldpass_sql);
-    $data=mysqli_fetch_assoc($get_oldpass_exec);
+    $get_oldpass_sql = "SELECT hashed_password FROM employee_details WHERE e_id=?";
+    $stmt = $conn->prepare($get_oldpass_sql);
+    $stmt->bind_param('i', $_SESSION["e_id"]);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $data = $res->fetch_assoc();
     if (md5($oldpass) == $data['hashed_password'])
     {
       return TRUE;
@@ -138,10 +126,21 @@
 
   function update_password($conn, $update_password_data)
   {
-    $e_id = $_SESSION["e_id"];
     $newhashedpass = md5($update_password_data);
-    $update_password_sql = "UPDATE employee_details SET hashed_password='$newhashedpass' WHERE e_id=$e_id";
-    $update_password_exec = mysqli_query($conn, $update_password_sql);
+    $update_password_sql = "UPDATE employee_details SET hashed_password=? WHERE e_id=?";
+    $stmt = $conn->prepare($update_password_sql);
+    $stmt->bind_param('si', $newhashedpass, $_SESSION["e_id"]);
+    $stmt->execute();
+  }
+
+  function deleteaccount($conn)
+  {
+    $dlt_acc_sql = "DELETE FROM employee_details WHERE e_id=?";
+    $stmt = $conn->prepare($dlt_acc_sql);
+    $stmt->bind_param('i', $_SESSION['e_id']);
+    print_r($stmt);die;
+    $stmt->execute();
+    header('Location: ../index.php');
   }
 
   function test_input($data)

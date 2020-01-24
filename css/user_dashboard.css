@@ -21,12 +21,22 @@
   border: 1px solid #ccc;
 } */
 
-#changepassword-div, #profile-div, #delete-account-div
+#cnfm_delete_form
+{
+  padding: 100px 400px;
+}
+
+#changepassword-div, #profile-div, #delete-account-div, #confirm-delete-div
 {
   display: none;
 }
 
-#delete-account-div h2
+#confirm-delete-div
+{
+  margin-left: 100px;
+}
+
+#delete-account-div h2, #confirm-delete-div h2
 {
   color: #ff4d4d;
 }
