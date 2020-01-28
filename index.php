@@ -147,8 +147,8 @@
           {
             $dob = $GLOBALS['userOBJ']->test_input($_POST["dob"]);
           }
-
-          if ($_POST["gender"] == "")
+          // echo $_POST["gender"];die;
+          if (empty($_POST["gender"]))
           {
             $genderErr = "gender is required";
           }
