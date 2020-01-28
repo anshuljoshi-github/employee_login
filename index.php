@@ -1,5 +1,5 @@
 <?php
-  require_once('private/functions.php');
+  require_once('private/UserClass.php');
 ?>
 
 <html>
@@ -31,7 +31,7 @@
           }
           else
           {
-            $login_email = test_input($_POST["login-email"]);
+            $login_email = $GLOBALS['userOBJ']->test_input($_POST["login-email"]);
             if (!preg_match("/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/", $login_email))
             {
               $login_emailErr = "Invalid email address";
@@ -44,7 +44,7 @@
           }
           else
           {
-            $login_password = test_input($_POST["login-password"]);
+            $login_password = $GLOBALS['userOBJ']->test_input($_POST["login-password"]);
             if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/", $login_password))
             {
               $login_passwordErr = "password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character";
@@ -53,7 +53,7 @@
 
           if (empty($login_emailErr) && empty($login_passwordErr))
           {
-            validate_login($conn, $login_email, $login_password);
+            $GLOBALS['userOBJ']->validate_login($login_email, $login_password);
           }
         }
 
@@ -68,7 +68,7 @@
           }
           else
           {
-            $fname = test_input($_POST["first_name"]);
+            $fname = $GLOBALS['userOBJ']->test_input($_POST["first_name"]);
             if (!preg_match("/^[a-zA-Z ]*$/",$fname))
             {
               $fnameErr = "Only letters and white space allowed";
@@ -81,7 +81,7 @@
           }
           else
           {
-            $lname = test_input($_POST["last_name"]);
+            $lname = $GLOBALS['userOBJ']->test_input($_POST["last_name"]);
             if (!preg_match("/^[a-zA-Z ]*$/",$lname))
             {
               $lnameErr = "Only letters and white space allowed";
@@ -94,7 +94,7 @@
           }
           else
           {
-            $pnum = test_input($_POST["phone_number"]);
+            $pnum = $GLOBALS['userOBJ']->test_input($_POST["phone_number"]);
             if (!preg_match("/^\d{10}$/",$pnum)) {
               $pnumErr = "incorrect phone number format";
             }
@@ -106,7 +106,7 @@
           }
           else
           {
-            $email = test_input($_POST["email"]);
+            $email = $GLOBALS['userOBJ']->test_input($_POST["email"]);
             if (!preg_match("/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/", $email))
             {
               $emailErr = "Invalid email address";
@@ -119,7 +119,7 @@
           }
           else
           {
-            $password = test_input($_POST["password"]);
+            $password = $GLOBALS['userOBJ']->test_input($_POST["password"]);
             if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/", $password))
             {
               $passwordErr = "password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character";
@@ -132,7 +132,7 @@
           }
           else
           {
-            $confirm_password = test_input($_POST["cnfm_pass"]);
+            $confirm_password = $GLOBALS['userOBJ']->test_input($_POST["cnfm_pass"]);
             if ($password != $confirm_password)
             {
               $confirm_passwordErr = "passwords didn't match";
@@ -145,7 +145,7 @@
           }
           else
           {
-            $dob = test_input($_POST["dob"]);
+            $dob = $GLOBALS['userOBJ']->test_input($_POST["dob"]);
           }
 
           if ($_POST["gender"] == "")
@@ -154,7 +154,7 @@
           }
           else
           {
-            $gender = test_input($_POST["gender"]);
+            $gender = $GLOBALS['userOBJ']->test_input($_POST["gender"]);
           }
 
           if ($_POST["address"] == "")
@@ -163,13 +163,13 @@
           }
           else
           {
-            $address = test_input($_POST["address"]);
+            $address = $GLOBALS['userOBJ']->test_input($_POST["address"]);
           }
 
           if (empty($fnameErr) && empty($lnameErr) && empty($pnumErr) && empty($emailErr) && empty($passwordErr) && empty($confirm_passwordErr) && empty($dobErr) && empty($genderErr) && empty($addressErr))
           {
             $user_data = array('fname' => $fname, 'lname' => $lname, 'pnum' => $pnum, 'email' => $email, 'confirm_password' => $confirm_password, 'dob' => $dob, 'gender' => $gender, 'address' => $address);
-            insert_user_data($conn, $user_data);
+            $GLOBALS['userOBJ']->insert_user_data($user_data);
           }
           else
           {

@@ -1,5 +1,5 @@
 <?php
-  require_once('private/functions.php');
+  require_once('private/UserClass.php');
 ?>
 
 <!DOCTYPE html>
@@ -19,13 +19,13 @@
       else
       {
         $fnameErr = $lnameErr = $pnumErr = $emailErr = $dobErr = $genderErr = $addressErr = "";
-        $fname = get_fields_data($conn, "first_name");
-        $lname = get_fields_data($conn, "last_name");
-        $pnum = get_fields_data($conn, "phone_number");
-        $email = get_fields_data($conn, "email");
-        $dob = get_fields_data($conn, "dob");
-        $gender = get_fields_data($conn, "gender");
-        $address = get_fields_data($conn, "address");
+        $fname = $GLOBALS['userOBJ']->get_fields_data("first_name");
+        $lname = $GLOBALS['userOBJ']->get_fields_data("last_name");
+        $pnum = $GLOBALS['userOBJ']->get_fields_data("phone_number");
+        $email = $GLOBALS['userOBJ']->get_fields_data("email");
+        $dob = $GLOBALS['userOBJ']->get_fields_data("dob");
+        $gender = $GLOBALS['userOBJ']->get_fields_data("gender");
+        $address = $GLOBALS['userOBJ']->get_fields_data("address");
         // print_r($fname."\t".$lname."\t".$pnum."\t".$email."\t".$dob."\t".$gender."\t".$address);die;
 
         if (isset($_POST["update-account-btn"]))
@@ -36,7 +36,7 @@
           }
           else
           {
-            $fname = test_input($_POST["fname"]);
+            $fname = $GLOBALS['userOBJ']->test_input($_POST["fname"]);
             if (!preg_match("/^[a-zA-Z ]*$/",$fname))
             {
               $fnameErr = "Only letters and white space allowed";
@@ -49,7 +49,7 @@
           }
           else
           {
-            $lname = test_input($_POST["lname"]);
+            $lname = $GLOBALS['userOBJ']->test_input($_POST["lname"]);
             if (!preg_match("/^[a-zA-Z ]*$/",$lname))
             {
               $lnameErr = "Only letters and white space allowed";
@@ -62,7 +62,7 @@
           }
           else
           {
-            $pnum = test_input($_POST["pnum"]);
+            $pnum = $GLOBALS['userOBJ']->test_input($_POST["pnum"]);
             if (!preg_match("/^\d{10}$/",$pnum)) {
               $pnumErr = "incorrect phone number format";
             }
@@ -74,7 +74,7 @@
           }
           else
           {
-            $email = test_input($_POST["email"]);
+            $email = $GLOBALS['userOBJ']->test_input($_POST["email"]);
             if (!preg_match("/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/", $email))
             {
               $emailErr = "Invalid email address";
@@ -87,7 +87,7 @@
           }
           else
           {
-            $dob = test_input($_POST["dob"]);
+            $dob = $GLOBALS['userOBJ']->test_input($_POST["dob"]);
           }
 
           if ($_POST["gender"] == "")
@@ -96,7 +96,7 @@
           }
           else
           {
-            $gender = test_input($_POST["gender"]);
+            $gender = $GLOBALS['userOBJ']->test_input($_POST["gender"]);
           }
 
           if ($_POST["address"] == "")
@@ -105,13 +105,13 @@
           }
           else
           {
-            $address = test_input($_POST["address"]);
+            $address = $GLOBALS['userOBJ']->test_input($_POST["address"]);
           }
 
           if (empty($fnameErr) && empty($lnameErr) && empty($pnumErr) && empty($emailErr) && empty($dobErr) && empty($genderErr) && empty($addressErr))
           {
             $update_data = array('fname' => $fname, 'lname' => $lname, 'pnum' => $pnum, 'email' => $email, 'dob' => $dob, 'gender' => $gender, 'address' => $address);
-            update_user_profile($conn, $update_data);
+            $GLOBALS['userOBJ']->update_user_profile($update_data);
           }
         }
 
@@ -126,8 +126,8 @@
           }
           else
           {
-            $oldpassword = test_input($_POST["oldpass"]);
-            if (!old_password_check($conn, $oldpassword))
+            $oldpassword = $GLOBALS['userOBJ']->test_input($_POST["oldpass"]);
+            if (!$GLOBALS['userOBJ']->old_password_check($oldpassword))
             {
               $oldpasswordErr = "wrong old password inserted";
             }
@@ -139,14 +139,14 @@
           }
           else
           {
-            $newpassword = test_input($_POST["newpass"]);
+            $newpassword = $GLOBALS['userOBJ']->test_input($_POST["newpass"]);
             if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/", $newpassword))
             {
               $newpasswordErr = "password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character";
             }
           }
 
-          $cnfmnewpassword = test_input($_POST["cnfmnewpass"]);
+          $cnfmnewpassword = $GLOBALS['userOBJ']->test_input($_POST["cnfmnewpass"]);
           if ($newpassword != $cnfmnewpassword)
           {
             $cnfmnewpasswordErr = "passwords didn't match";
@@ -154,7 +154,7 @@
 
           if (empty($oldpasswordErr) && empty($newpasswordErr) && empty($cnfmnewpasswordErr))
           {
-            update_password($conn, $cnfmnewpassword);
+            $GLOBALS['userOBJ']->update_password($cnfmnewpassword);
           }
         }
 
@@ -167,14 +167,14 @@
           }
           else
           {
-            $cnfm_delete_val = test_input($_POST["cnfm_delete_input"]);
+            $cnfm_delete_val = $GLOBALS['userOBJ']->test_input($_POST["cnfm_delete_input"]);
             if ($_POST["cnfm_delete_input"] != "DELETE")
             {
               $cnfm_delete_val_Err = "Wrong word typed";
             }
             else
             {
-              deleteaccount($conn);
+              $GLOBALS['userOBJ']->deleteaccount();
             }
           }
         }
@@ -197,7 +197,7 @@
     </div>
     <div id="home-div" class="display-div-content">
       <h2>
-        <?php echo "Welcome\t".get_fields_data($conn, "first_name")."!"; ?></h2>
+        <?php echo "Welcome\t".$GLOBALS['userOBJ']->get_fields_data("first_name")."!"; ?></h2>
     </div>
     <div id="profile-div" class="display-div-content">
       <h2>profile</h2>
