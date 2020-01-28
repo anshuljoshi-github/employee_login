@@ -3,7 +3,6 @@
 ?>
 
 <?php
-
   function insert_user_data($conn, $user_data)
   {
     $check_email_query = "SELECT COUNT(*) countentry FROM employee_details WHERE email = ?";

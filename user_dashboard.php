@@ -205,34 +205,35 @@
         <fieldset>
           <table>
             <tr>
-              <td>First name: </td><td><input type="text" name="fname" value="<?php echo $fname; ?>"><span class="error"> <?php echo $fnameErr;?></span> </td>
+              <td>First name: </td><td><input type="text" id="fname-id" name="fname" value="<?php echo $fname; ?>"><span class="error"> <?php echo $fnameErr;?></span> </td>
             </tr>
             <tr>
-              <td>Last name: </td><td><input type="text" name="lname" value="<?php echo $lname; ?>"><span class="error"> <?php echo $lnameErr;?></span> </td>
+              <td>Last name: </td><td><input type="text" id="lname-id" name="lname" value="<?php echo $lname; ?>"><span class="error"> <?php echo $lnameErr;?></span> </td>
             </tr>
             <tr>
-              <td>Phone number: </td><td><input type="text" name="pnum" value="<?php echo $pnum; ?>"><span class="error"> <?php echo $pnumErr;?></span> </td>
+              <td>Phone number: </td><td><input type="text" id="pnum-id" name="pnum" value="<?php echo $pnum; ?>"><span class="error"> <?php echo $pnumErr;?></span> </td>
             </tr>
             <tr>
-              <td>Email: </td><td><input type="text" name="email" value="<?php echo $email; ?>"><span class="error"> <?php echo $emailErr;?></span> </td>
+              <td>Email: </td><td><input type="text" id="email-id" name="email" value="<?php echo $email; ?>"><span class="error"> <?php echo $emailErr;?></span> </td>
             </tr>
             <tr>
-              <td>Date of Birth: </td><td><input type="date" name="dob" value="<?php echo $dob; ?>"><span class="error"> <?php echo $dobErr;?></span> </td>
+              <td>Date of Birth: </td><td><input type="date" id="dob-id" name="dob" value="<?php echo $dob; ?>"><span class="error"> <?php echo $dobErr;?></span> </td>
             </tr>
             <tr>
               <td>Gender: </td>
               <td>
-                <input type="radio" name="gender" <?php if ($gender=="female") echo "checked";?> value="female"> Female
-                <input type="radio" name="gender" <?php if ($gender=="male") echo "checked";?> value="male"> Male
-                <input type="radio" name="gender" <?php if ($gender=="other") echo "checked";?> value="other"> Other
+                <input type="radio" name="gender" class="gender" <?php if ($gender=="female") echo "checked";?> value="female"> Female
+                <input type="radio" name="gender" class="gender" <?php if ($gender=="male") echo "checked";?> value="male"> Male
+                <input type="radio" name="gender" class="gender" <?php if ($gender=="other") echo "checked";?> value="other"> Other
                 <span class="error"> <?php echo $genderErr;?></span>
               </td>
             </tr>
             <tr>
-              <td>Address: </td><td><input type="text" name="address" value="<?php echo $address; ?>"><span class="error"> <?php echo $addressErr;?></span> </td>
+              <td>Address: </td><td><input type="text" id="address-id" name="address" value="<?php echo $address; ?>"><span class="error"> <?php echo $addressErr;?></span> </td>
             </tr>
             <tr>
-              <td><input id="update-account-btn1" class="btn btn-success" type="submit" name="update-account-btn" value="update account"> </td><td><input class="btn btn-secondary" type="reset" name="" value="reset form"> </td>
+              <td><input id="update-account-btn1" class="btn btn-success" type="submit" name="update-account-btn" value="update account"> </td>
+              <td><input class="btn btn-secondary" type="reset" name="" value="reset form"> </td>
             </tr>
           </table>
         </fieldset>
@@ -243,13 +244,13 @@
       <form id="changepassword-form" class="" action="" method="post">
         <table>
           <tr>
-            <td>Old password: </td><td><input type="password" name="oldpass" value=""><span class="error"> <?php echo $oldpasswordErr;?></span> </td>
+            <td>Old password: </td><td><input type="password" id="oldpass-id" name="oldpass" value=""><span class="error"> <?php echo $oldpasswordErr;?></span> </td>
           </tr>
           <tr>
-            <td>New password: </td><td><input type="password" name="newpass" value=""><span class="error"> <?php echo $newpasswordErr;?></span> </td>
+            <td>New password: </td><td><input type="password" id="newpass-id" name="newpass" value=""><span class="error"> <?php echo $newpasswordErr;?></span> </td>
           </tr>
           <tr>
-            <td>Confirm new password: </td><td><input type="password" name="cnfmnewpass" value=""><span class="error"> <?php echo $cnfmnewpasswordErr;?></span> </td>
+            <td>Confirm new password: </td><td><input type="password" id="cnfmnewpass-id" name="cnfmnewpass" value=""><span class="error"> <?php echo $cnfmnewpasswordErr;?></span> </td>
           </tr>
           <tr>
             <td><input class="btn btn-success" type="submit" id="changepassword-btn-id" name="changepassword-btn" value="change password"> </td>

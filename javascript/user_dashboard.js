@@ -34,18 +34,18 @@ $(document).ready(
         console.log("changepassword button clicked");
       }
     );
-    $("#changepassword-btn-id").click(
-      function()
-      {
-        event.preventDefault();
-        // $("#home-div").hide();
-        // $("#profile-div").hide();
-        // $("#changepassword-div").show();
-        // $("#delete-account-div").hide();
-        // $("#confirm-delete-div").hide();
-        console.log("changepassword button from form clicked");
-      }
-    );
+    // $("#changepassword-btn-id").click(
+    //   function()
+    //   {
+    //     event.preventDefault();
+    //     // $("#home-div").hide();
+    //     // $("#profile-div").hide();
+    //     // $("#changepassword-div").show();
+    //     // $("#delete-account-div").hide();
+    //     // $("#confirm-delete-div").hide();
+    //     console.log("changepassword button from form clicked");
+    //   }
+    // );
     $("#deleteaccount-btn").click(
       function()
       {
@@ -82,16 +82,16 @@ $(document).ready(
     $("#update-account-btn1").click(
       function()
       {
-        var first_name = $("fname").val();
-        var last_name = $("lname").val();
-        var phone_number = $("pnum").val();
-        var email = $("email").val();
-        var dob = new Date($("dob").val());
+        var first_name = $("#fname-id").val();
+        var last_name = $("#lname-id").val();
+        var phone_number = $("#pnum-id").val();
+        var email = $("#email-id").val();
+        var dob = new Date($("#dob-id").val());
         var day = dob.getDate();
         var month = dob.getMonth() + 1;
         var year = dob.getFullYear();
-        var gender = $("gender:checked").val();
-        var address = $("address").val();
+        var gender = $(".gender:checked").val();
+        var address = $("#address-id").val();
 
         if(first_name == "")
         {
@@ -151,12 +151,12 @@ $(document).ready(
         }
       }
     );
-    $("#changepassword-btn1").click(
+    $("#changepassword-btn-id").click(
       function()
       {
-        var oldpass = $("oldpass").val();
-        var newpass = $("newpass").val();
-        var cnfmnewpass = $("cnfmnewpass").val();
+        var oldpass = $("#oldpass-id").val();
+        var newpass = $("#newpass-id").val();
+        var cnfmnewpass = $("#cnfmnewpass-id").val();
 
         if (oldpass == "")
         {
@@ -165,7 +165,7 @@ $(document).ready(
         }
         else if (!(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/.test(oldpass)))
         {
-          alert("password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character");
+          alert("old password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character");
           return false;
         }
         else if (newpass == "")
@@ -175,7 +175,7 @@ $(document).ready(
         }
         else if (!(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/.test(newpass)))
         {
-          alert("password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character");
+          alert("new password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character");
           return false;
         }
         else if (newpass != cnfmnewpass)
