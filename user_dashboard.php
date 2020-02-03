@@ -183,7 +183,7 @@
     <h2 id="main-heading">User Dashboard</h2>
     <div id="div1" class="topnavbar-div">
       <ul id="topnavbar">
-        <li><a href="private/logout.php" id="logout-btn">Logout</a></li>
+        <li><a href="private/logout.php" id="logout-btn" onclick="signOut();">Logout</a></li>
       </ul>
     </div>
     <div id="div2" class="sidenavbar-div">

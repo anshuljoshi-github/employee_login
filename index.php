@@ -1,9 +1,12 @@
 <?php
   require_once('private/UserClass.php');
+  require_once 'vendor/autoload.php';
 ?>
 
 <html>
   <head>
+    <meta name="google-signin-client_id" content="518287848645-r4ttvucumk2vpimkvdfrsm46aqbge1i6.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <link rel="stylesheet" href="css/bootstrap_css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="css/login_page.css">
     <script src="javascript/jquery-3.4.1.min.js"></script>
@@ -13,6 +16,41 @@
   </head>
   <body>
     <?php
+      // init configuration
+      $clientID = '518287848645-r4ttvucumk2vpimkvdfrsm46aqbge1i6.apps.googleusercontent.com';
+      $clientSecret = 'Yk2XuyDWgt2yoUp0rCOk8jWZ';
+      $redirectUri = 'http://localhost:8080/employee_login/';
+
+      // create Client Request to access Google API
+      $client = new Google_Client();
+      $client->setClientId($clientID);
+      $client->setClientSecret($clientSecret);
+      $client->setRedirectUri($redirectUri);
+      $client->addScope("email");
+      $client->addScope("profile");
+
+      // authenticate code from Google OAuth Flow
+      if (isset($_GET['code']))
+      {
+        $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+        $client->setAccessToken($token['access_token']);
+
+        // get profile info
+        $google_oauth = new Google_Service_Oauth2($client);
+        $google_account_info = $google_oauth->userinfo->get();
+        $email =  $google_account_info->email;
+        $fname =  $google_account_info->givenName;
+        $lname =  $google_account_info->familyName;
+        $google_id =  $google_account_info->id;
+        // print_r($google_account_info);die;
+
+        // now you can use this profile info to create account in your website and make user logged in.
+      }
+      else
+      {
+        echo "<a href='".$client->createAuthUrl()."'>Google Login</a>";
+      }
+
 
       if (isset($_SESSION['e_id']))
       {
@@ -190,12 +228,29 @@
               <td><p>Password: </p></td><td> <input type="password" id="user_password" name="login-password" value="<?php echo $login_password; ?>"> <span class="error"> <?php echo $login_passwordErr;?></span></td>
             </tr>
             <tr>
-              <td><button name="login-btn1" id="login-btn" type="submit" class="btn btn-primary">Log in</button></td><td>&nbsp &nbsp
-                  <button id="login-signup-btn" type="button" class="btn btn-outline-secondary">Signup</button></td>
+              <td><button name="login-btn1" id="login-btn" type="submit" class="btn btn-primary">Log in</button></td>
+              <td>&nbsp &nbsp<button id="login-signup-btn" type="button" class="btn btn-outline-secondary">Signup</button></td>
             </tr>
           </table>
         </fieldset>
       </form>
+      <table>
+        <tr>
+          <td colspan="1"><span class="span-for-OR">OR signin with</span></td>
+        </tr>
+        <tr>
+          <td colspan="1"><div class="g-signin2 google_signin_btn" data-onsuccess="onSignIn"></div></td>
+          <td><a href="" onclick="signOut();">signout</a> </td>
+        </tr>
+      </table>
+      <div id="google-acc-data" style="display:none">
+        <p id="googgle-id"></p>
+        <p id="full-name"></p>
+        <p id="given-name"></p>
+        <p id="family-name"></p>
+        <img id="user-img" class="img-circle" src="" alt="user-img">
+        <p id="email"></p>
+      </div>
     </div>
     <div id="signup-div">
       <form class="" action="" method="post">
@@ -238,6 +293,12 @@
               <td colspan="2"><button id="signup-btn" type="submit" name="signup" class="btn btn-success">Sign Up</button> &nbsp &nbsp
                               <button id="cancel-btn" type="button" class="btn btn-secondary">Cancel</button></td>
               <td></td>
+            </tr>
+            <tr>
+              <td colspan="4"><span class="span-for-OR">OR signin with</span></td>
+            </tr>
+            <tr>
+              <td colspan="4"><div class="g-signin2 google_signin_btn" data-onsuccess="onSignIn"></div></td>
             </tr>
           </table>
         </fieldset>

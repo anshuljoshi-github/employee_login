@@ -1,0 +1,175 @@
+<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>
+
+<?php
+      // Set session variables
+      $_SESSION["favcolor"] = "green";
+      $_SESSION["favanimal"] = "cat";
+      echo "Session variables are set.";
+    	?>
+
+
+first_name: asd
+last_name: asd
+phone number: 9876543210
+email: asdasd@asd.com
+pass: ASDasd@123
+cnfm_pass: ASDasd@123
+dob: Sat Jan 25 2020 05:30:00 GMT+0530 (India Standard Time)
+date: 25	month: 1	year: 2020
+gender: male
+address: asd
+
+<?php echo $_SERVER["PHP_SELF"];?>
+
+// echo $phone_number1;exit;
+
+// $sql = "INSERT INTO 'employees_details' (first_name, last_name, phone_number, email, hashed_passeord, dob, gender, address) VALUES (?,?,?,?,?,?,?,?)";
+// $stmt = $conn->prepare("INSERT INTO 'employees_details' (first_name, last_name, phone_number, email, hashed_passeord, dob, gender, address) VALUES (?,?,?,?,?,?,?,?)");
+// $stmt = bind_param("ssisssss", $fname, $lname, $phone_number, $email, $password, $dob, $gender, $address);
+// $stmt->execute();
+// echo "New records created successfully";
+
+echo print_r($result);exit;
+$result = mysqli_num_rows($query_exec);
+
+$rowcount=mysqli_num_rows($result);
+
+<?php print_r($_SESSION); ?>
+
+<?php
+require_once("php_connection/create_connection.php");
+?>
+<?php
+if(isset($_POST["submit"]))
+{
+$e_id=$_POST["e_id"];
+$first_name=$_POST["first_name"];
+$last_name=$_POST["last_name"];
+$email_id=$_POST["email_id"];
+$phone=$_POST["phone"];
+$dob=$_POST["dob"];
+$gender=$_POST["gender"];
+$address=$_POST["address"];
+$query2=mysqli_query($con,"UPDATE sign_up SET first_name='$first_name',last_name='$last_name',email_id='$email_id',phone='$phone',dob='$dob',gender='$gender',address='$address' WHERE e_id=$e_id");
+
+
+
+//for duplicate entry
+if ($query2)
+{
+echo "New record Updated";
+}
+else
+{
+?>
+<script>
+alert("Email Are Already Exists");
+window.open('sign-log.php');
+</script>
+<?php
+}
+?>
+
+<?php
+//yaha record insert ho gya hain iske baad me database se email or password ko match karwa rahe hain!!!
+?>
+<?php
+//after record insert session start and show session value into index page
+$email_id=$_POST["email_id"];
+$query3=mysqli_query($con,"select * from sign_up where email_id='$email_id'");
+$rowcount=mysqli_num_rows($query3);
+if($rowcount==TRUE)
+{
+$_SESSION["email_id"]=$email_id;
+$data=mysqli_fetch_assoc($query3);
+
+$e_id=$data["e_id"];
+$_SESSION["e_id"]=$e_id;
+
+$first_name=$data["first_name"];
+$_SESSION["first_name"]=$first_name;
+$last_name=$data["last_name"];
+$_SESSION["last_name"]=$last_name;
+$phone=$data["phone"];
+$_SESSION["phone"]=$phone;
+$dob=$data["dob"];
+$_SESSION["dob"]=$dob;
+$gender=$data["gender"];
+$_SESSION["gender"]=$gender;
+$address=$data["address"];
+$_SESSION["address"]=$address;
+header("location:index.php");
+}
+}
+?>
+<?php
+require_once("php_connection/close_connection.php");
+?>
+
+
+
+$check_query = "SELECT * FROM employee_details WHERE email='".$_SESSION['email']."'";
+$query_exec = mysqli_query($conn, $check_query);
+if(mysqli_num_rows($query_exec))
+{
+  $data=mysqli_fetch_assoc($query_exec);
+  $e_id=$data['e_id'];
+  $_SESSION['fname']=$data['first_name'];
+  $_SESSION['lname']=$data['last_name'];
+  $_SESSION['pnum']=$data['phone_number'];
+  $_SESSION['dob']=$data['dob'];
+  $_SESSION['gender']=$data['gender'];
+  $_SESSION['address']=$data['address'];
+  $_SESSION['e_id']=$e_id;
+  $_SESSION["email"]=$data['email'];
+  header("Location: user_dashboard.php");
+}
+if (isset($_POST["update-account-btn"]))
+
+echo isset($fnameErr) . isset($lnameErr) . isset($pnumErr) . isset($emailErr) . isset($passwordErr) . isset($confirm_passwordErr) . isset($dobErr) . isset($genderErr) . isset($addressErr);die;
+echo "if block";die;
+
+print_r($update_profile_sql."\n".$fnameErr."\n".$lnameErr."\n".$pnumErr."\n".$emailErr."\n".$dobErr."\n".$genderErr."\n".$addressErr);die;
+
+
+$res = mysqli_query($con,"SELECT COUNT(*) count FROM sign_up WHERE email_id = '$email_id'");
+$data = mysqli_fetch_assoc($res);
+if ($data['count'] > 0)
+{
+  ?>
+  <script>
+    alert("Email Already Exists");
+  </script>
+  <?php
+}
+
+//for getting data from json to pp file
+<?php
+  $get_credentials = file_get_contents("JSON/credentials.json");
+  $get_credentials = json_decode($get_credentials, true);
+  $client_id = $get_credentials['client_id'];
+?>
+
+public function insert($table,$data)
+{
+$field_set="";
+
+foreach($data as $key=>$value)
+{
+
+$field_set=$field_set."$key='$value',";//append
+
+}
+$field_set=rtrim($field_set,",");
+$query="INSERT INTO $table SET $field_set";
+$query_fire=mysqli_query($GLOBALS['con'],$query);
+if($query_fire==TRUE)
+{
+
+return $query_fire;
+}
+else
+{
+return false;
+}
+}

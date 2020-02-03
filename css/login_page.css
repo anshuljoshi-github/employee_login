@@ -11,6 +11,8 @@
   /* border: 3px solid #73AD21; */
   padding: 10px;
 }
+
+
 /* #signup-btn, #cancel-btn
 {
   margin: auto;
@@ -24,6 +26,18 @@
 .error
 {
   color: #FF0000;
+}
+
+.google_signin_btn
+{
+  padding: 0% 20%;
+}
+
+
+.span-for-OR
+{
+  color: #b3b3b3;
+  padding: 0% 30%;
 }
 
 table, th, td

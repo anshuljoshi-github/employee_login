@@ -135,3 +135,46 @@ $(document).ready(
     );
   }
 );
+
+gapi.load('auth2', function()
+{
+  gapi.auth2.init();
+});
+
+function onSignIn(googleUser)
+{
+  $(".google-acc-data").css("display","block");
+  // alert("inside onsignin");
+  // Useful data for your client-side scripts:
+  var profile = googleUser.getBasicProfile();
+  $(".googgle-id").text(profile.getId());
+  $(".full-name").text(profile.getName());
+  $(".given-name").text(profile.getGivenName());
+  $(".family-name").text(profile.getFamilyName());
+  $(".user-img").attr('src',profile.getImageUrl());
+  $(".email").text(profile.getEmail());
+  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+  console.log('Full Name: ' + profile.getName());
+  // var namearray = profile.getName().split(" ");
+  // alert(namearray[0]+"\t"+namearray[1]);
+  console.log('Given Name: ' + profile.getGivenName());
+  console.log('Family Name: ' + profile.getFamilyName());
+  console.log("Image URL: " + profile.getImageUrl());
+  console.log("Email: " + profile.getEmail());
+  // alert("Email: " + profile.getEmail());
+  // The ID token you need to pass to your backend:
+  var id_token = googleUser.getAuthResponse().id_token;
+  console.log("ID Token: " + id_token);
+
+}
+
+function signOut()
+{
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function ()
+  {
+
+    $(".google-acc-data").css("display","none");
+    console.log('User signed out.');
+  });
+}
