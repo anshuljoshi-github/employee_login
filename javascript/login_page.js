@@ -141,31 +141,38 @@ gapi.load('auth2', function()
   gapi.auth2.init();
 });
 
+var id_token, profile, g_id, g_full_name, g_fname, g_lname, g_u_img_url, g_email;
+
 function onSignIn(googleUser)
 {
-  $(".google-acc-data").css("display","block");
+  $("#google-acc-data").css("display","block");
   // alert("inside onsignin");
   // Useful data for your client-side scripts:
-  var profile = googleUser.getBasicProfile();
-  $(".googgle-id").text(profile.getId());
-  $(".full-name").text(profile.getName());
-  $(".given-name").text(profile.getGivenName());
-  $(".family-name").text(profile.getFamilyName());
-  $(".user-img").attr('src',profile.getImageUrl());
-  $(".email").text(profile.getEmail());
-  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-  console.log('Full Name: ' + profile.getName());
+  id_token = googleUser.getAuthResponse().id_token;
+  profile = googleUser.getBasicProfile();
+  g_id = profile.getId();
+  g_full_name = profile.getName();
+  g_fname = profile.getGivenName();
+  g_lname = profile.getFamilyName();
+  g_u_img_url = profile.getImageUrl();
+  g_email = profile.getEmail();
+  $("#google-id").text(g_id);
+  $("#full-name").text(g_full_name);
+  $("#given-name").text(g_fname);
+  $("#family-name").text(g_lname);
+  $("#user-img").attr('src', g_u_img_url);
+  $("#email").text(g_email);
+  console.log("ID: " + g_id); // Don't send this directly to your server!
+  console.log('Full Name: ' + g_full_name);
   // var namearray = profile.getName().split(" ");
   // alert(namearray[0]+"\t"+namearray[1]);
-  console.log('Given Name: ' + profile.getGivenName());
-  console.log('Family Name: ' + profile.getFamilyName());
-  console.log("Image URL: " + profile.getImageUrl());
-  console.log("Email: " + profile.getEmail());
+  console.log('Given Name: ' + g_fname);
+  console.log('Family Name: ' + g_lname);
+  console.log("Image URL: " + g_u_img_url);
+  console.log("Email: " + g_email);
   // alert("Email: " + profile.getEmail());
   // The ID token you need to pass to your backend:
-  var id_token = googleUser.getAuthResponse().id_token;
   console.log("ID Token: " + id_token);
-
 }
 
 function signOut()
@@ -173,8 +180,7 @@ function signOut()
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function ()
   {
-
-    $(".google-acc-data").css("display","none");
+    $("#google-acc-data").css("display","none");
     console.log('User signed out.');
   });
 }

@@ -1,6 +1,6 @@
 <?php
   require_once('private/UserClass.php');
-  require_once 'vendor/autoload.php';
+  // require_once 'vendor/autoload.php';
 ?>
 
 <html>
@@ -16,40 +16,46 @@
   </head>
   <body>
     <?php
-      // init configuration
-      $clientID = '518287848645-r4ttvucumk2vpimkvdfrsm46aqbge1i6.apps.googleusercontent.com';
-      $clientSecret = 'Yk2XuyDWgt2yoUp0rCOk8jWZ';
-      $redirectUri = 'http://localhost:8080/employee_login/';
-
-      // create Client Request to access Google API
-      $client = new Google_Client();
-      $client->setClientId($clientID);
-      $client->setClientSecret($clientSecret);
-      $client->setRedirectUri($redirectUri);
-      $client->addScope("email");
-      $client->addScope("profile");
-
-      // authenticate code from Google OAuth Flow
-      if (isset($_GET['code']))
-      {
-        $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-        $client->setAccessToken($token['access_token']);
-
-        // get profile info
-        $google_oauth = new Google_Service_Oauth2($client);
-        $google_account_info = $google_oauth->userinfo->get();
-        $email =  $google_account_info->email;
-        $fname =  $google_account_info->givenName;
-        $lname =  $google_account_info->familyName;
-        $google_id =  $google_account_info->id;
-        // print_r($google_account_info);die;
-
-        // now you can use this profile info to create account in your website and make user logged in.
-      }
-      else
-      {
-        echo "<a href='".$client->createAuthUrl()."'>Google Login</a>";
-      }
+      // // init configuration
+      // $clientID = '518287848645-r4ttvucumk2vpimkvdfrsm46aqbge1i6.apps.googleusercontent.com';
+      // $clientSecret = 'Yk2XuyDWgt2yoUp0rCOk8jWZ';
+      // $redirectUri = 'http://localhost:8080/employee_login/';
+      //
+      // // create Client Request to access Google API
+      // $client = new Google_Client();
+      // $client->setClientId($clientID);
+      // $client->setClientSecret($clientSecret);
+      // $client->setRedirectUri($redirectUri);
+      // $client->addScope("email");
+      // $client->addScope("profile");
+      //
+      // // authenticate code from Google OAuth Flow
+      // if (isset($_GET['code']))
+      // {
+      //   $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
+      //   $client->setAccessToken($token['access_token']);
+      //
+      //   // get profile info
+      //   $google_oauth = new Google_Service_Oauth2($client);
+      //   $google_account_info = $google_oauth->userinfo->get();
+      //   $email =  $google_account_info->email;
+      //   $fname =  $google_account_info->givenName;
+      //   $lname =  $google_account_info->familyName;
+      //   $google_id =  $google_account_info->id;
+      //   // print_r($google_account_info);die;
+      //
+      //   // now you can use this profile info to create account in your website and make user logged in.
+      // }
+      // else
+      // {
+      //   echo "<a href='".$client->createAuthUrl()."'>Google Login</a>";
+      // }
+      // echo $_GET['g_fname']."  ".$_GET['g_lname']."  ".$_GET['g_email'];
+      // if (!empty($_GET['g_fname']) && !empty($_GET['g_lname']) && !empty($_GET['g_email']))
+      // {
+      //
+      //   print_r($_GET);die;
+      // }
 
 
       if (isset($_SESSION['e_id']))
@@ -243,15 +249,17 @@
           <td><a href="" onclick="signOut();">signout</a> </td>
         </tr>
       </table>
-      <div id="google-acc-data" style="display:none">
-        <p id="googgle-id"></p>
-        <p id="full-name"></p>
-        <p id="given-name"></p>
-        <p id="family-name"></p>
-        <img id="user-img" class="img-circle" src="" alt="user-img">
-        <p id="email"></p>
-      </div>
     </div>
+
+    <div id="google-acc-data">
+      <p id=google-id></p>
+      <p id=full-name></p>
+      <p id=given-name></p>
+      <p id=family-name></p>
+      <img id=user-img class="img-circle" src="" alt="user-img">
+      <p id=email></p>
+    </div>
+
     <div id="signup-div">
       <form class="" action="" method="post">
         <fieldset>
