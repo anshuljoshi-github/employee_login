@@ -1,320 +1,315 @@
 <?php
-  require_once('private/UserClass.php');
-  // require_once 'vendor/autoload.php';
-?>
+/**
+ * CodeIgniter
+ *
+ * An open source application development framework for PHP
+ *
+ * This content is released under the MIT License (MIT)
+ *
+ * Copyright (c) 2014 - 2019, British Columbia Institute of Technology
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @package	CodeIgniter
+ * @author	EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
+ * @link	https://codeigniter.com
+ * @since	Version 1.0.0
+ * @filesource
+ */
 
-<html>
-  <head>
-    <meta name="google-signin-client_id" content="518287848645-r4ttvucumk2vpimkvdfrsm46aqbge1i6.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <link rel="stylesheet" href="css/bootstrap_css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/login_page.css">
-    <script src="javascript/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="javascript/login_page.js"></script>
-    <meta charset="utf-8">
-    <title>Login page</title>
-  </head>
-  <body>
-    <?php
-      // // init configuration
-      // $clientID = '518287848645-r4ttvucumk2vpimkvdfrsm46aqbge1i6.apps.googleusercontent.com';
-      // $clientSecret = 'Yk2XuyDWgt2yoUp0rCOk8jWZ';
-      // $redirectUri = 'http://localhost:8080/employee_login/';
-      //
-      // // create Client Request to access Google API
-      // $client = new Google_Client();
-      // $client->setClientId($clientID);
-      // $client->setClientSecret($clientSecret);
-      // $client->setRedirectUri($redirectUri);
-      // $client->addScope("email");
-      // $client->addScope("profile");
-      //
-      // // authenticate code from Google OAuth Flow
-      // if (isset($_GET['code']))
-      // {
-      //   $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-      //   $client->setAccessToken($token['access_token']);
-      //
-      //   // get profile info
-      //   $google_oauth = new Google_Service_Oauth2($client);
-      //   $google_account_info = $google_oauth->userinfo->get();
-      //   $email =  $google_account_info->email;
-      //   $fname =  $google_account_info->givenName;
-      //   $lname =  $google_account_info->familyName;
-      //   $google_id =  $google_account_info->id;
-      //   // print_r($google_account_info);die;
-      //
-      //   // now you can use this profile info to create account in your website and make user logged in.
-      // }
-      // else
-      // {
-      //   echo "<a href='".$client->createAuthUrl()."'>Google Login</a>";
-      // }
-      // echo $_GET['g_fname']."  ".$_GET['g_lname']."  ".$_GET['g_email'];
-      // if (!empty($_GET['g_fname']) && !empty($_GET['g_lname']) && !empty($_GET['g_email']))
-      // {
-      //
-      //   print_r($_GET);die;
-      // }
+/*
+ *---------------------------------------------------------------
+ * APPLICATION ENVIRONMENT
+ *---------------------------------------------------------------
+ *
+ * You can load different configurations depending on your
+ * current environment. Setting the environment also influences
+ * things like logging and error reporting.
+ *
+ * This can be set to anything, but default usage is:
+ *
+ *     development
+ *     testing
+ *     production
+ *
+ * NOTE: If you change these, also change the error_reporting() code below
+ */
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+
+/*
+ *---------------------------------------------------------------
+ * ERROR REPORTING
+ *---------------------------------------------------------------
+ *
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
+ */
+switch (ENVIRONMENT)
+{
+	case 'development':
+		error_reporting(-1);
+		ini_set('display_errors', 1);
+	break;
+
+	case 'testing':
+	case 'production':
+		ini_set('display_errors', 0);
+		if (version_compare(PHP_VERSION, '5.3', '>='))
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+		}
+		else
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
+		}
+	break;
+
+	default:
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'The application environment is not set correctly.';
+		exit(1); // EXIT_ERROR
+}
+
+/*
+ *---------------------------------------------------------------
+ * SYSTEM DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * This variable must contain the name of your "system" directory.
+ * Set the path if it is not in the same directory as this file.
+ */
+	$system_path = 'system';
+
+/*
+ *---------------------------------------------------------------
+ * APPLICATION DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want this front controller to use a different "application"
+ * directory than the default one you can set its name here. The directory
+ * can also be renamed or relocated anywhere on your server. If you do,
+ * use an absolute (full) server path.
+ * For more info please see the user guide:
+ *
+ * https://codeigniter.com/user_guide/general/managing_apps.html
+ *
+ * NO TRAILING SLASH!
+ */
+	$application_folder = 'application';
+
+/*
+ *---------------------------------------------------------------
+ * VIEW DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want to move the view directory out of the application
+ * directory, set the path to it here. The directory can be renamed
+ * and relocated anywhere on your server. If blank, it will default
+ * to the standard location inside your application directory.
+ * If you do move this, use an absolute (full) server path.
+ *
+ * NO TRAILING SLASH!
+ */
+	$view_folder = '';
 
 
-      if (isset($_SESSION['e_id']))
-      {
-        header('Location: user_dashboard.php');
-      }
-      else
-      {
-        $login_emailErr = $login_passwordErr = "";
-        $login_email = $login_password ="";
+/*
+ * --------------------------------------------------------------------
+ * DEFAULT CONTROLLER
+ * --------------------------------------------------------------------
+ *
+ * Normally you will set your default controller in the routes.php file.
+ * You can, however, force a custom routing by hard-coding a
+ * specific controller class/function here. For most applications, you
+ * WILL NOT set your routing here, but it's an option for those
+ * special instances where you might want to override the standard
+ * routing in a specific front controller that shares a common CI installation.
+ *
+ * IMPORTANT: If you set the routing here, NO OTHER controller will be
+ * callable. In essence, this preference limits your application to ONE
+ * specific controller. Leave the function name blank if you need
+ * to call functions dynamically via the URI.
+ *
+ * Un-comment the $routing array below to use this feature
+ */
+	// The directory name, relative to the "controllers" directory.  Leave blank
+	// if your controller is not in a sub-directory within the "controllers" one
+	// $routing['directory'] = '';
 
-        if (isset($_POST["login-btn1"]))
-        {
-          if (empty($_POST["login-email"]))
-          {
-            $login_emailErr = "Email is required";
-          }
-          else
-          {
-            $login_email = $GLOBALS['userOBJ']->test_input($_POST["login-email"]);
-            if (!preg_match("/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/", $login_email))
-            {
-              $login_emailErr = "Invalid email address";
-            }
-          }
+	// The controller class file name.  Example:  mycontroller
+	// $routing['controller'] = '';
 
-          if (empty($_POST["login-password"]))
-          {
-            $login_passwordErr = "password is required";
-          }
-          else
-          {
-            $login_password = $GLOBALS['userOBJ']->test_input($_POST["login-password"]);
-            if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/", $login_password))
-            {
-              $login_passwordErr = "password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character";
-            }
-          }
+	// The controller function you wish to be called.
+	// $routing['function']	= '';
 
-          if (empty($login_emailErr) && empty($login_passwordErr))
-          {
-            $GLOBALS['userOBJ']->validate_login($login_email, $login_password);
-          }
-        }
 
-        $fnameErr = $lnameErr = $pnumErr = $emailErr = $passwordErr = $confirm_passwordErr = $dobErr = $genderErr = $addressErr = "";
-        $fname = $lname = $pnum = $email = $password = $confirm_password = $hashed_password = $dob = $gender = $address = "";
+/*
+ * -------------------------------------------------------------------
+ *  CUSTOM CONFIG VALUES
+ * -------------------------------------------------------------------
+ *
+ * The $assign_to_config array below will be passed dynamically to the
+ * config class when initialized. This allows you to set custom config
+ * items or override any default config values found in the config.php file.
+ * This can be handy as it permits you to share one application between
+ * multiple front controller files, with each file containing different
+ * config values.
+ *
+ * Un-comment the $assign_to_config array below to use this feature
+ */
+	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
-        if(isset($_POST["signup"]))
-        {
-          if (empty($_POST["first_name"]))
-          {
-            $fnameErr = "first name is required";
-          }
-          else
-          {
-            $fname = $GLOBALS['userOBJ']->test_input($_POST["first_name"]);
-            if (!preg_match("/^[a-zA-Z ]*$/",$fname))
-            {
-              $fnameErr = "Only letters and white space allowed";
-            }
-          }
 
-          if (empty($_POST["last_name"]))
-          {
-            $lnameErr = "last name is required";
-          }
-          else
-          {
-            $lname = $GLOBALS['userOBJ']->test_input($_POST["last_name"]);
-            if (!preg_match("/^[a-zA-Z ]*$/",$lname))
-            {
-              $lnameErr = "Only letters and white space allowed";
-            }
-          }
 
-          if (empty($_POST["phone_number"]))
-          {
-            $pnumErr = "phone number is required";
-          }
-          else
-          {
-            $pnum = $GLOBALS['userOBJ']->test_input($_POST["phone_number"]);
-            if (!preg_match("/^\d{10}$/",$pnum)) {
-              $pnumErr = "incorrect phone number format";
-            }
-          }
+// --------------------------------------------------------------------
+// END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
+// --------------------------------------------------------------------
 
-          if (empty($_POST["email"]))
-          {
-            $emailErr = "Email is required";
-          }
-          else
-          {
-            $email = $GLOBALS['userOBJ']->test_input($_POST["email"]);
-            if (!preg_match("/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/", $email))
-            {
-              $emailErr = "Invalid email address";
-            }
-          }
+/*
+ * ---------------------------------------------------------------
+ *  Resolve the system path for increased reliability
+ * ---------------------------------------------------------------
+ */
 
-          if (empty($_POST["password"]))
-          {
-            $passwordErr = "password is required";
-          }
-          else
-          {
-            $password = $GLOBALS['userOBJ']->test_input($_POST["password"]);
-            if (!preg_match("/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,16}$/", $password))
-            {
-              $passwordErr = "password must contain 8 to 16 characters, at least one lowercase letter, one uppercase letter, one numeric digit, and one special character";
-            }
-          }
+	// Set the current directory correctly for CLI requests
+	if (defined('STDIN'))
+	{
+		chdir(dirname(__FILE__));
+	}
 
-          if (empty($_POST["cnfm_pass"]))
-          {
-            $confirm_passwordErr = "confirm password can't be empty";
-          }
-          else
-          {
-            $confirm_password = $GLOBALS['userOBJ']->test_input($_POST["cnfm_pass"]);
-            if ($password != $confirm_password)
-            {
-              $confirm_passwordErr = "passwords didn't match";
-            }
-          }
+	if (($_temp = realpath($system_path)) !== FALSE)
+	{
+		$system_path = $_temp.DIRECTORY_SEPARATOR;
+	}
+	else
+	{
+		// Ensure there's a trailing slash
+		$system_path = strtr(
+			rtrim($system_path, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		).DIRECTORY_SEPARATOR;
+	}
 
-          if ($_POST["dob"] == "")
-          {
-            $dobErr = "date of birth is required";
-          }
-          else
-          {
-            $dob = $GLOBALS['userOBJ']->test_input($_POST["dob"]);
-          }
-          // echo $_POST["gender"];die;
-          if (empty($_POST["gender"]))
-          {
-            $genderErr = "gender is required";
-          }
-          else
-          {
-            $gender = $GLOBALS['userOBJ']->test_input($_POST["gender"]);
-          }
+	// Is the system path correct?
+	if ( ! is_dir($system_path))
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: '.pathinfo(__FILE__, PATHINFO_BASENAME);
+		exit(3); // EXIT_CONFIG
+	}
 
-          if ($_POST["address"] == "")
-          {
-            $addressErr = "address is required";
-          }
-          else
-          {
-            $address = $GLOBALS['userOBJ']->test_input($_POST["address"]);
-          }
+/*
+ * -------------------------------------------------------------------
+ *  Now that we know the path, set the main path constants
+ * -------------------------------------------------------------------
+ */
+	// The name of THIS file
+	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
-          if (empty($fnameErr) && empty($lnameErr) && empty($pnumErr) && empty($emailErr) && empty($passwordErr) && empty($confirm_passwordErr) && empty($dobErr) && empty($genderErr) && empty($addressErr))
-          {
-            $user_data = array('fname' => $fname, 'lname' => $lname, 'pnum' => $pnum, 'email' => $email, 'confirm_password' => $confirm_password, 'dob' => $dob, 'gender' => $gender, 'address' => $address);
-            $GLOBALS['userOBJ']->insert_user_data($user_data);
-          }
-          else
-          {
-            echo "some error exists";
-          }
-        }
-      }
-    ?>
-    <div id="login-div" class="" method="post">
-      <form class="" action="" method="post">
-        <fieldset>
-          <h2>login for employees</h2>
-          <table>
-            <tr>
-              <td><p>Email: </p></td><td><input type="text" id="user_email" name="login-email" value="<?php echo $login_email; ?>"> <span class="error"> <?php echo $login_emailErr;?></span></td>
-            </tr>
-            <tr>
-              <td><p>Password: </p></td><td> <input type="password" id="user_password" name="login-password" value="<?php echo $login_password; ?>"> <span class="error"> <?php echo $login_passwordErr;?></span></td>
-            </tr>
-            <tr>
-              <td><button name="login-btn1" id="login-btn" type="submit" class="btn btn-primary">Log in</button></td>
-              <td>&nbsp &nbsp<button id="login-signup-btn" type="button" class="btn btn-outline-secondary">Signup</button></td>
-            </tr>
-          </table>
-        </fieldset>
-      </form>
-      <table>
-        <tr>
-          <td colspan="1"><span class="span-for-OR">OR signin with</span></td>
-        </tr>
-        <tr>
-          <td colspan="1"><div class="g-signin2 google_signin_btn" data-onsuccess="onSignIn"></div></td>
-          <td><a href="" onclick="signOut();">signout</a> </td>
-        </tr>
-      </table>
-    </div>
+	// Path to the system directory
+	define('BASEPATH', $system_path);
 
-    <div id="google-acc-data">
-      <p id=google-id></p>
-      <p id=full-name></p>
-      <p id=given-name></p>
-      <p id=family-name></p>
-      <img id=user-img class="img-circle" src="" alt="user-img">
-      <p id=email></p>
-    </div>
+	// Path to the front controller (this file) directory
+	define('FCPATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
-    <div id="signup-div">
-      <form class="" action="" method="post">
-        <fieldset>
-          <h2>Signup form for new employees</h2>
-          <table>
-            <tr>
-              <td>First name: </td><td> <input id="first-name" type="text" name="first_name" value="<?php echo $fname; ?>"> <span class="error"> <?php echo $fnameErr;?></span></td>
-              <td>Last name: </td><td> <input id="last-name" type="text" name="last_name" value="<?php echo $lname; ?>"> <span class="error"> <?php echo $lnameErr;?></span></td>
-            </tr>
-            <tr>
-              <td >Phone Number: </td><td colspan="3"><input id="phone-number" class="col-3-input" type="text" name="phone_number" value="<?php echo $pnum; ?>"> <span class="error"> <?php echo $pnumErr;?></span></td>
-            </tr>
-            <tr>
-              <td >Email: </td><td colspan="3"><input id="email" class="col-3-input" type="text" name="email" value="<?php echo $email; ?>"><span class="error"> <?php echo $emailErr;?></span></td>
-            </tr>
-            <tr>
-              <td>Password: </td><td colspan="3"><input id="pass" class="col-3-input" type="text" name="password" value="<?php echo $password ?>"> <span class="error"> <?php echo $passwordErr;?></span></td>
-            </tr>
-            <tr>
-              <td>Confirm Password: </td><td colspan="3"><input id="cnfm-pass" class="col-3-input" type="text" name="cnfm_pass" value="<?php echo $confirm_password ?>"> <span class="error"> <?php echo $confirm_passwordErr;?></span></td>
-            </tr>
-            <tr>
-              <td>Date of Birth: </td><td colspan="3"><input id="dob" class="col-3-input" type="date" name="dob" value="<?php echo $dob ?>"> <span class="error"> <?php echo $dobErr;?></span></td>
-            </tr>
-            <tr>
-              <td>Gender: </td>
-              <td colspan="3">
-                <input class="gender" type="radio" name="gender" <?php if (isset($gender) && $gender=="male") echo "checked";?> value="male"> Male
-                <input class="gender" type="radio" name="gender" <?php if (isset($gender) && $gender=="female") echo "checked";?> value="female"> Female
-                <input class="gender" type="radio" name="gender" <?php if (isset($gender) && $gender=="other") echo "checked";?> value="other"> Other
-                <span class="error"> <?php echo $genderErr;?></span>
-              </td>
-            </tr>
-            <tr>
-              <td>Address: </td><td colspan="3"><input id="addr" class="col-3-input" type="text" name="address" value="" style=""> <span class="error"> <?php echo $addressErr;?></span></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td colspan="2"><button id="signup-btn" type="submit" name="signup" class="btn btn-success">Sign Up</button> &nbsp &nbsp
-                              <button id="cancel-btn" type="button" class="btn btn-secondary">Cancel</button></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td colspan="4"><span class="span-for-OR">OR signin with</span></td>
-            </tr>
-            <tr>
-              <td colspan="4"><div class="g-signin2 google_signin_btn" data-onsuccess="onSignIn"></div></td>
-            </tr>
-          </table>
-        </fieldset>
-      </form>
-    </div>
-  </body>
-</html>
+	// Name of the "system" directory
+	define('SYSDIR', basename(BASEPATH));
 
-<?php
-  include('private/db_connection_close.php');
-?>
+	// The path to the "application" directory
+	if (is_dir($application_folder))
+	{
+		if (($_temp = realpath($application_folder)) !== FALSE)
+		{
+			$application_folder = $_temp;
+		}
+		else
+		{
+			$application_folder = strtr(
+				rtrim($application_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(BASEPATH.$application_folder.DIRECTORY_SEPARATOR))
+	{
+		$application_folder = BASEPATH.strtr(
+			trim($application_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your application folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
+
+	define('APPPATH', $application_folder.DIRECTORY_SEPARATOR);
+
+	// The path to the "views" directory
+	if ( ! isset($view_folder[0]) && is_dir(APPPATH.'views'.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.'views';
+	}
+	elseif (is_dir($view_folder))
+	{
+		if (($_temp = realpath($view_folder)) !== FALSE)
+		{
+			$view_folder = $_temp;
+		}
+		else
+		{
+			$view_folder = strtr(
+				rtrim($view_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(APPPATH.$view_folder.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.strtr(
+			trim($view_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your view folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
+
+	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
+
+/*
+ * --------------------------------------------------------------------
+ * LOAD THE BOOTSTRAP FILE
+ * --------------------------------------------------------------------
+ *
+ * And away we go...
+ */
+require_once BASEPATH.'core/CodeIgniter.php';
